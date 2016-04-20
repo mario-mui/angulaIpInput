@@ -1,0 +1,18 @@
+{
+  "name": "angular-ip-input",
+  "version": "0.0.0",
+  "authors": [
+    "mario ma <mario.ma@trantect.com>"
+  ],
+  "description": "ip input directive",
+  "main": "angularIpInput.js",
+  "keywords": [
+    "angular",
+    "ip",
+    "input"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "angular": "~1.5.5"
+  }
+}
