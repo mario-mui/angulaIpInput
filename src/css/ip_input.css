@@ -15,6 +15,7 @@
 }
 
 .ip-input > .ip-cell  {
+    float: left;
     border-radius: 4px;
     height: 100%;
     width: 25%;

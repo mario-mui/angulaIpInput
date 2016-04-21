@@ -1,4 +1,4 @@
-angular.module('ipv4-input-directive', []).directive('gkIpv4Input', function() {
+angular.module('ng-ip-input', []).directive('ngIpv4', function() {
     var backup = function(value) {
         var input = this;
         if (index !== undefined) {
@@ -42,6 +42,14 @@ angular.module('ipv4-input-directive', []).directive('gkIpv4Input', function() {
         return str;
     };
 
+    var setCurIpStr = function(cells,value){
+        var cellValues = value.split('.');
+        for(var i=0;i<cellValues.length;i++){
+            console.log(cells[i]);
+            cells[i].value = cellValues[i];
+        }
+    };
+
     // function for text input cell
     var getCursorPosition = function() {
         var cell = this;
@@ -64,10 +72,7 @@ angular.module('ipv4-input-directive', []).directive('gkIpv4Input', function() {
         var input = angular.element(element.find('div'));
         var cells = element.find('input');
         var prevValue = '';
-
-        if (attrs.rwd !== undefined)
-            input.toggleClass('rwd', true);
-
+        setCurIpStr(cells,scope.ipValue);
         scope.$watch(attrs.value, function(value) {
             scope[attrs.valid] = isValidIPStr(value); // set valid bool
 
@@ -91,7 +96,7 @@ angular.module('ipv4-input-directive', []).directive('gkIpv4Input', function() {
         Array.prototype.forEach.call(cells, function(cell, index) {
             angular.element(cell).on('keydown', function(e) {
                 if(e.keyCode >= 48 && e.keyCode <= 57 || e.keyCode >= 96 && e.keyCode <= 105) { // numbers
-                    prevValue = scope[attrs.value];
+                    prevValue = scope.ipValue;
                 } else if(e.keyCode == 37 || e.keyCode == 39) { //left key. right key
                     if (e.keyCode == 37 && getCursorPosition.call(cell) === 0) {
                         selectCell.call(input, index - 1);
@@ -113,21 +118,21 @@ angular.module('ipv4-input-directive', []).directive('gkIpv4Input', function() {
                 if (e.keyCode >= 48 && e.keyCode <= 57 || e.keyCode >= 96 && e.keyCode <= 105) {
                     var val = angular.element(this).val();
                     var num = Number(val);
-
+                    console.log(prevValue);
                     if (num > 255) {
                         revert(cells, prevValue);
                     } else if (val.length > 1 && val[0] === "0") {
                         revert(cells, prevValue);
                     } else if (val.length === 3) {
-                        scope[attrs.value] = getCurIPStr(cells);
+                        scope.ipValue = getCurIPStr(cells);
                         scope.$apply();
                         selectCell.call(input, index + 1)
                     } else {
-                        scope[attrs.value] = getCurIPStr(cells);
+                        scope.ipValue = getCurIPStr(cells);
                         scope.$apply();
                     }
                 } else if (e.keyCode == 8 || e.keyCode == 46) {
-                    scope[attrs.value] = getCurIPStr(cells);
+                    scope.ipValue = getCurIPStr(cells);
                     scope.$apply();
                 }
             });
@@ -136,15 +141,19 @@ angular.module('ipv4-input-directive', []).directive('gkIpv4Input', function() {
 
     return {
         restrict: 'E',
+        scope:{
+            ipValue:"=",
+            inputCss:"="
+        },
         template:
-        '<div class="ipv4-input">' +
-        '<input type="text" class="ipv4-cell" />' +
-        '<label class="ipv4-dot">.</label>' +
-        '<input type="text" class="ipv4-cell" />' +
-        '<label class="ipv4-dot">.</label>' +
-        '<input type="text" class="ipv4-cell" />' +
-        '<label class="ipv4-dot">.</label>' +
-        '<input type="text" class="ipv4-cell" />' +
+        '<div class="ip-input" ng-class="inputCss">' +
+        '<input type="text" class="ip-cell" />' +
+        '<label class="ip-dot">.</label>' +
+        '<input type="text" class="ip-cell" />' +
+        '<label class="ip-dot">.</label>' +
+        '<input type="text" class="ip-cell" />' +
+        '<label class="ip-dot">.</label>' +
+        '<input type="text" class="ip-cell" />' +
         '</div>',
         link: link
     };

@@ -5,16 +5,11 @@
   <title>Ip input</title>
   <link href="./src/css/ip_input.css" rel="stylesheet" type="text/css">
 </head>
-<body>
-  <div class="ip-input">
-  <input type="text" class="ip-cell" />
-  <label class="ip-dot">.</label>
-  <input type="text" class="ip-cell" />
-  <label class="ip-dot">.</label>
-  <input type="text" class="ip-cell" />
-  <label class="ip-dot">.</label>
-  <input type="text" class="ip-cell" />
-  </div>
+<body ng-app="app" ng-controller="ctl">
+  {{ipValue}}
+  <ng-ipv4 ip-value="ipValue" input-css="'bootstrap'"></ng-ipv4>
 </body>
 <script src="./bower_components/angular/angular.js"></script>
+<script src="./src/js/ip_input.js"></script>
+<script src="app.js"></script>
 </html>
