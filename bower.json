@@ -1,11 +1,12 @@
 {
   "name": "ngIpv4",
-  "version": "0.0.0",
+  "version": "0.0.1",
+  "homepage": "https://github.com/mario56/angulaIpInput",
   "authors": [
     "mario ma <mario.ma@trantect.com>"
   ],
   "description": "ip input directive",
-  "main": "angularIpInput.js",
+  "main": "src",
   "keywords": [
     "angular",
     "ip",
