@@ -72,6 +72,9 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
         var input = angular.element(element.find('div'));
         var cells = element.find('input');
         var prevValue = '';
+        if (typeof scope.ipValue == 'undefined'){
+            scope.ipValue = ''
+        }
         setCurIpStr(cells,scope.ipValue);
         scope.$watch(attrs.value, function(value) {
             scope[attrs.valid] = isValidIPStr(value); // set valid bool
