@@ -12,8 +12,5 @@
     "ip",
     "input"
   ],
-  "license": "MIT",
-  "dependencies": {
-    "angular": "~1.5.5"
-  }
+  "license": "MIT"
 }
