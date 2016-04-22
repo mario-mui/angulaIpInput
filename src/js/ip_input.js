@@ -21,7 +21,7 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
         input.find("input")[index].select();
     };
 
-    var isValidIPStr = function(ipString) {
+    var isInvalidIPStr = function(ipString) {
         if (typeof ipString !== 'string') return false;
 
         var ipStrArray = ipString.split('.');
@@ -35,11 +35,18 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
 
     var getCurIPStr = function(cells) {
         var str = "";
+        var error = false;
         for(var i = 0; i < 4; ++i) {
             value = angular.element(cells[i]).val();
+            if(value==''){
+                error = true
+            }
             str += (i === 0) ? value : "." + value;
         }
-        return str;
+        return {
+            str:str,
+            error:error
+        };
     };
 
     var setCurIpStr = function(cells,value){
@@ -77,9 +84,9 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
         }
         setCurIpStr(cells,scope.ipValue);
         scope.$watch(attrs.value, function(value) {
-            scope[attrs.valid] = isValidIPStr(value); // set valid bool
+            scope[attrs.valid] = isInvalidIPStr(value); // set valid bool
 
-            if (!isValidIPStr(value)) return;
+            if (!isInvalidIPStr(value)) return;
 
             // set ip address
             value.split('.').forEach(function(str, index) {
@@ -127,15 +134,21 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
                     } else if (val.length > 1 && val[0] === "0") {
                         revert(cells, prevValue);
                     } else if (val.length === 3) {
-                        scope.ipValue = getCurIPStr(cells);
+                        var curStr = getCurIPStr(cells);
+                        scope.ipValue = curStr.str;
+                        scope.isInvalid = curStr.error;
                         scope.$apply();
                         selectCell.call(input, index + 1)
                     } else {
-                        scope.ipValue = getCurIPStr(cells);
+                        var curStr = getCurIPStr(cells);
+                        scope.isInvalid = curStr.error;
+                        scope.ipValue = curStr.str;
                         scope.$apply();
                     }
                 } else if (e.keyCode == 8 || e.keyCode == 46) {
-                    scope.ipValue = getCurIPStr(cells);
+                    var curStr = getCurIPStr(cells);
+                    scope.isInvalid = curStr.error;
+                    scope.ipValue = curStr.str;
                     scope.$apply();
                 }
             });
@@ -146,7 +159,8 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
         restrict: 'E',
         scope:{
             ipValue:"=",
-            inputCss:"="
+            inputCss:"=",
+            isInvalid:"="
         },
         template:
         '<div class="ip-input" ng-class="inputCss">' +
