@@ -1,12 +1,4 @@
 angular.module('ng-ip-input', []).directive('ngIpv4', function() {
-    var backup = function(value) {
-        var input = this;
-        if (index !== undefined) {
-            input.prevValues = value;
-        } else {
-            throw new Error('backup error');
-        }
-    };
 
     var revert = function(cells, prevValue) {
         prevValue.split('.').forEach(function(value, index) {
@@ -35,7 +27,6 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
 
     var getCurIPStr = function(cells) {
         var str = "";
-        var error = false;
         for(var i = 0; i < 4; ++i) {
             value = angular.element(cells[i]).val();
             if(value==''){
@@ -43,16 +34,12 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
             }
             str += (i === 0) ? value : "." + value;
         }
-        return {
-            str:str,
-            error:error
-        };
+        return str;
     };
 
     var setCurIpStr = function(cells,value){
         var cellValues = value.split('.');
         for(var i=0;i<cellValues.length;i++){
-            console.log(cells[i]);
             cells[i].value = cellValues[i];
         }
     };
@@ -75,31 +62,31 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
     };
 
     // link function
-    function link(scope, element, attrs) {
+    function link(scope, element, attrs,ctrl) {
         var input = angular.element(element.find('div'));
         var cells = element.find('input');
         var prevValue = '';
+        var inputName = scope.$parent.form[scope.inputName];
+
+        ctrl.$validators.ipv4 = function(modelValue){
+            return isInvalidIPStr(modelValue)
+        };
+
         if (typeof scope.ipValue == 'undefined'){
             scope.ipValue = ''
         }
         setCurIpStr(cells,scope.ipValue);
-        scope.$watch(attrs.value, function(value) {
-            scope[attrs.valid] = isInvalidIPStr(value); // set valid bool
-
-            if (!isInvalidIPStr(value)) return;
-
-            // set ip address
-            value.split('.').forEach(function(str, index) {
-                angular.element(cells[index]).val(str);
-            });
-        });
 
         cells.on('focus', function(event) {
+            scope.isFocus = true;
+            scope.$apply();
             event.target.select();
             element.find('div').toggleClass('selected', true);
         });
 
         cells.on('focusout', function(event) {
+            scope.isFocus = false;
+            scope.$apply();
             element.find('div').toggleClass('selected', false);
         });
 
@@ -124,31 +111,25 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
             });
 
             angular.element(cell).on('keyup', function(e) {
+                inputName.$setDirty(true);
                 // numbers
                 if (e.keyCode >= 48 && e.keyCode <= 57 || e.keyCode >= 96 && e.keyCode <= 105) {
                     var val = angular.element(this).val();
                     var num = Number(val);
-                    console.log(prevValue);
                     if (num > 255) {
                         revert(cells, prevValue);
                     } else if (val.length > 1 && val[0] === "0") {
                         revert(cells, prevValue);
                     } else if (val.length === 3) {
-                        var curStr = getCurIPStr(cells);
-                        scope.ipValue = curStr.str;
-                        scope.isInvalid = curStr.error;
+                        scope.ipValue = getCurIPStr(cells);
                         scope.$apply();
                         selectCell.call(input, index + 1)
                     } else {
-                        var curStr = getCurIPStr(cells);
-                        scope.isInvalid = curStr.error;
-                        scope.ipValue = curStr.str;
+                        scope.ipValue  = getCurIPStr(cells);
                         scope.$apply();
                     }
                 } else if (e.keyCode == 8 || e.keyCode == 46) {
-                    var curStr = getCurIPStr(cells);
-                    scope.isInvalid = curStr.error;
-                    scope.ipValue = curStr.str;
+                    scope.ipValue  = getCurIPStr(cells);
                     scope.$apply();
                 }
             });
@@ -160,8 +141,10 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
         scope:{
             ipValue:"=",
             inputCss:"=",
-            isInvalid:"="
+            inputName:'=',
+            isFocus:"="
         },
+        require: '?ngModel',
         template:
         '<div class="ip-input" ng-class="inputCss">' +
         '<input type="text" class="ip-cell" />' +
