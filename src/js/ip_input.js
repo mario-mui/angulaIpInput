@@ -66,8 +66,6 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
         var input = angular.element(element.find('div'));
         var cells = element.find('input');
         var prevValue = '';
-        var inputName = scope.$parent.form[scope.inputName];
-
         ctrl.$validators.ipv4 = function(modelValue){
             return isInvalidIPStr(modelValue)
         };
@@ -111,7 +109,7 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
             });
 
             angular.element(cell).on('keyup', function(e) {
-                inputName.$setDirty(true);
+                ctrl.$setDirty(true);
                 // numbers
                 if (e.keyCode >= 48 && e.keyCode <= 57 || e.keyCode >= 96 && e.keyCode <= 105) {
                     var val = angular.element(this).val();
@@ -141,7 +139,6 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
         scope:{
             ipValue:"=",
             inputCss:"=",
-            inputName:'=',
             isFocus:"="
         },
         require: '?ngModel',
