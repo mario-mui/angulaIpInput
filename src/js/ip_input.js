@@ -92,7 +92,6 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
         };
 
         if(scope.maxThan){
-            console.log("###")
             scope.$watch('scope.maxThan',function(){
                 ctrl.$validators.ipMaxThen = function(modelValue){
                     var compareRes =  compareTo(modelValue,scope.maxThan);
