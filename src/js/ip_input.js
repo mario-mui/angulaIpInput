@@ -7,6 +7,26 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
         });
     };
 
+    var compareTo = function(ipBegin, ipEnd)
+    {
+        var temp1;
+        var temp2;
+        temp1 = ipBegin.split(".");
+        temp2 = ipEnd.split(".");
+        for (var i = 0; i < 4; i++)
+        {
+            if (Number(temp1[i])>Number(temp2[i]))
+            {
+                return 1;
+            }
+            else if (Number(temp1[i])<Number(temp2[i]))
+            {
+                return -1;
+            }
+        }
+        return 0;
+    };
+
     var selectCell = function(index) {
         var input = this;
         if (index === undefined || index < 0 || index > 3) return;
@@ -66,9 +86,23 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
         var input = angular.element(element.find('div'));
         var cells = element.find('input');
         var prevValue = '';
+
         ctrl.$validators.ipv4 = function(modelValue){
             return isInvalidIPStr(modelValue)
         };
+
+        if(scope.maxThan){
+            console.log("###")
+            scope.$watch('scope.maxThan',function(){
+                ctrl.$validators.ipMaxThen = function(modelValue){
+                    var compareRes =  compareTo(modelValue,scope.maxThan);
+                    if(compareRes == -1){
+                        return false
+                    }
+                    return true
+                };
+            })
+        }
 
         if (typeof scope.ipValue == 'undefined'){
             scope.ipValue = ''
@@ -139,7 +173,8 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
         scope:{
             ipValue:"=",
             inputCss:"=",
-            isFocus:"="
+            isFocus:"=",
+            maxThan:"="
         },
         require: '?ngModel',
         template:
