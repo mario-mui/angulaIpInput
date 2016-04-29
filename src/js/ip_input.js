@@ -97,7 +97,7 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
             if(scope.maxThan && isInvalidIPStr(scope.maxThan)){
                 ctrl.$validators.ipMaxThen = function(modelValue){
                     var compareRes =  compareTo(modelValue,scope.maxThan);
-                    if(compareRes == -1){
+                    if(compareRes == -1 || compareRes == 0){
                         return false
                     }
                     return true
