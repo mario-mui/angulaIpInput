@@ -116,7 +116,7 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
         setCurIpStr(cells,scope.ipValue);
 
         cells.on('focus', function(event) {
-            if(scope.isFocus){
+            if(scope.isFocus != undefined){
                 scope.isFocus = true;
                 scope.$apply();
             }
@@ -125,7 +125,7 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
         });
 
         cells.on('focusout', function(event) {
-            if(scope.isFocus){
+            if(scope.isFocus != undefined){
                 scope.isFocus = false;
                 scope.$apply();
             }
