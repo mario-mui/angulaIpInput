@@ -94,11 +94,14 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
         scope.$watch(function(){
             return scope.maxThan
         },function(){
-            if(scope.maxThan && isInvalidIPStr(scope.maxThan) && isInvalidIPStr(scope.ipValue)){
+            if(scope.maxThan){
                 ctrl.$validators.ipMaxThen = function(modelValue){
-                    var compareRes =  compareTo(modelValue,scope.maxThan);
-                    if(compareRes == -1 || compareRes == 0){
-                        return false
+                    if(isInvalidIPStr(modelValue) && isInvalidIPStr(scope.maxThan)){
+                        var compareRes =  compareTo(modelValue,scope.maxThan);
+                        if(compareRes == -1 || compareRes == 0){
+                            return false
+                        }
+                        return true
                     }
                     return true
                 };
