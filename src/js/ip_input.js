@@ -91,8 +91,10 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
             return isInvalidIPStr(modelValue)
         };
 
-        if(scope.maxThan){
-            scope.$watch('scope.maxThan',function(){
+        scope.$watch(function(){
+            return scope.maxThan
+        },function(){
+            if(scope.maxThan && isInvalidIPStr(scope.maxThan)){
                 ctrl.$validators.ipMaxThen = function(modelValue){
                     var compareRes =  compareTo(modelValue,scope.maxThan);
                     if(compareRes == -1){
@@ -100,24 +102,33 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
                     }
                     return true
                 };
-            })
-        }
+
+                if(ctrl.$viewValue){
+                    ctrl.$validate();
+                }
+            }
+        });
 
         if (typeof scope.ipValue == 'undefined'){
             scope.ipValue = ''
         }
+
         setCurIpStr(cells,scope.ipValue);
 
         cells.on('focus', function(event) {
-            scope.isFocus = true;
-            scope.$apply();
+            if(scope.isFocus){
+                scope.isFocus = true;
+                scope.$apply();
+            }
             event.target.select();
             element.find('div').toggleClass('selected', true);
         });
 
         cells.on('focusout', function(event) {
-            scope.isFocus = false;
-            scope.$apply();
+            if(scope.isFocus){
+                scope.isFocus = false;
+                scope.$apply();
+            }
             element.find('div').toggleClass('selected', false);
         });
 

@@ -7,10 +7,12 @@
 </head>
 <body ng-app="app" ng-controller="ctl">
   {{ipValue}}
-  {{isfocus}}
+  {{ipValueM}}
   <form name="form">
-    <ng-ipv4 name="ip" ng-model="ipValue" ip-value="ipValue" input-css="'bootstrap'" is-focus="isfocus" max-than="'192.168.0.19'"></ng-ipv4>
+    <ng-ipv4 name="ip" ng-model="ipValue" ip-value="ipValue" input-css="'bootstrap'" is-focus="isfocus" max-than="ipValueM"></ng-ipv4>
   </form>
+
+  <ng-ipv4 ng-model="ipValue" ip-value="ipValueM" input-css="'bootstrap'"></ng-ipv4>
   {{form.ip}}
 </body>
 <script src="./bower_components/angular/angular.js"></script>
