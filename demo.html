@@ -10,11 +10,12 @@
   {{ipValueM}}
   {{isfocus}}
   <form name="form">
-    <ng-ipv4 name="ip" ng-model="ipValue" ip-value="ipValue" input-css="'bootstrap'" is-focus="isfocus" max-than="ipValueM"></ng-ipv4>
+    <ng-ipv4 name="ip" ng-model="ipValue" ip-value="ipValue" input-css="'bootstrap'" is-focus="isfocus" max-than="ipValueM" re-set-value="setValue()" event="initIpStr"></ng-ipv4>
   </form>
 
   <ng-ipv4 ng-model="ipValue" ip-value="ipValueM" input-css="'bootstrap'"></ng-ipv4>
   {{form.ip}}
+<button ng-click="setValue()">setValue</button>
 </body>
 <script src="./bower_components/angular/angular.js"></script>
 <script src="./src/js/ip_input.js"></script>

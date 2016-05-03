@@ -64,6 +64,12 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
         }
     };
 
+    var initIpStr = function(cells){
+        for(var i=0;i<cells.length;i++){
+            cells[i].value = '';
+        }
+    };
+
     // function for text input cell
     var getCursorPosition = function() {
         var cell = this;
@@ -117,6 +123,14 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
         }
 
         setCurIpStr(cells,scope.ipValue);
+
+        scope.$on(scope.event,function(event,data){
+            if(isInvalidIPStr(data)){
+                setCurIpStr(cells,data);
+            }else{
+                initIpStr(cells);
+            }
+        });
 
         cells.on('focus', function(event) {
             if(scope.isFocus != undefined){
@@ -187,7 +201,8 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
             ipValue:"=",
             inputCss:"=",
             isFocus:"=",
-            maxThan:"="
+            maxThan:"=",
+            event:"@"
         },
         require: '?ngModel',
         template:
