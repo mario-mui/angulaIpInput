@@ -202,18 +202,19 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
             inputCss:"=",
             isFocus:"=",
             maxThan:"=",
+            isDisabled:"=",
             event:"@"
         },
         require: '?ngModel',
         template:
         '<div class="ip-input" ng-class="inputCss">' +
-        '<input type="text" class="ip-cell" />' +
+        '<input type="text" class="ip-cell" ng-disabled="isDisabled"/>' +
         '<label class="ip-dot">.</label>' +
-        '<input type="text" class="ip-cell" />' +
+        '<input type="text" class="ip-cell" ng-disabled="isDisabled"/>' +
         '<label class="ip-dot">.</label>' +
-        '<input type="text" class="ip-cell" />' +
+        '<input type="text" class="ip-cell" ng-disabled="isDisabled"/>' +
         '<label class="ip-dot">.</label>' +
-        '<input type="text" class="ip-cell" />' +
+        '<input type="text" class="ip-cell" ng-disabled="isDisabled"/>' +
         '</div>',
         link: link
     };

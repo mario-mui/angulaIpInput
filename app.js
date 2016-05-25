@@ -9,4 +9,6 @@ angular.module('app',['ng-ip-input']).controller('ctl',function($scope){
     $scope.$broadcast('initIpStr','');
   }
 
+  $scope.ipDisabled = true
+
 });
