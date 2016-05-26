@@ -22,7 +22,6 @@
     border: none;
     text-align: center;
     outline: none;
-    background: #eee;
 }
 
 .ip-input > .ip-cell:first-child  {
