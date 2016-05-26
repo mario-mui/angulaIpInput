@@ -125,10 +125,23 @@ angular.module('ng-ip-input', []).directive('ngIpv4', function() {
         setCurIpStr(cells,scope.ipValue);
 
         scope.$on(scope.event,function(event,data){
-            if(isInvalidIPStr(data)){
-                setCurIpStr(cells,data);
-            }else{
-                initIpStr(cells);
+            if(data == undefined){
+                /*
+                 * setTimeout function to wait scope.$digest() exec ,for updated scope value
+                 * */
+                setTimeout(function () {
+                    if(isInvalidIPStr(scope.ipValue)){
+                        setCurIpStr(cells,scope.ipValue);
+                    }else{
+                        initIpStr(cells);
+                    }
+                }, 10);
+            }else {
+                if(isInvalidIPStr(data)){
+                    setCurIpStr(cells,data);
+                }else{
+                    initIpStr(cells);
+                }
             }
         });
 
